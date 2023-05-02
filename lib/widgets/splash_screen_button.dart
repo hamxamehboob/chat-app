@@ -11,14 +11,15 @@ class SplashScreenButton extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => Login(),
+              builder: (_) => const Login(),
             ),
           );
         },
         child: Container(
-          padding: const EdgeInsets.only(left: 90, right: 90, top: 8, bottom: 8),
+          padding:
+              const EdgeInsets.only(left: 90, right: 90, top: 8, bottom: 8),
           decoration: BoxDecoration(
-              color: Color(0xFF771F98),
+              color: const Color(0xFF771F98),
               borderRadius: BorderRadius.circular(15)),
           child: const Text(
             "Get Started",

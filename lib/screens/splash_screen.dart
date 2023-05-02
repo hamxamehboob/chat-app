@@ -64,18 +64,18 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                 ),
               ),
-              // Center(
-              //   child: SmoothPageIndicator(
-              //     controller: _controller,
-              //     count: 4,
-              //     effect: JumpingDotEffect(
-              //         dotColor: Colors.grey,
-              //         activeDotColor: Color(0xFF771F98),
-              //         jumpScale: 2,
-              //         dotHeight: 15,
-              //         verticalOffset: 20),
-              //   ),
-              // ),
+              Center(
+                child: SmoothPageIndicator(
+                  controller: _controller,
+                  count: 4,
+                  effect: JumpingDotEffect(
+                      dotColor: Colors.grey,
+                      activeDotColor: Color(0xFF771F98),
+                      jumpScale: 2,
+                      dotHeight: 15,
+                      verticalOffset: 20),
+                ),
+              ),
               SizedBox(
                 height: screenheight * 0.03,
               ),

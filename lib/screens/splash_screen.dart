@@ -1,4 +1,4 @@
-import 'package:chat_app/widgets/splash_screen_button.dart';
+import 'package:chat_app/widgets/text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -76,7 +76,9 @@ class _SplashScreenState extends State<SplashScreen> {
               SizedBox(
                 height: screenHeight * 0.03,
               ),
-              const SplashScreenButton(),
+              const ActionButton(
+                label: 'Get Started',
+              ),
             ],
           ),
         ),

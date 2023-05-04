@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return SafeArea(
       child: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.only(top: 88, left: 23),
+          padding: const EdgeInsets.only(top: 50, left: 23),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

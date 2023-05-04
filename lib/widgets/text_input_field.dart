@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
-class TextInputField extends StatelessWidget {
-  const TextInputField({Key? key}) : super(key: key);
+class TextInputField extends StatefulWidget {
+   TextInputField({Key? key}) : super(key: key);
+  @override
+  State<TextInputField> createState() => _TextInputFieldState();
 
+}
+
+class _TextInputFieldState extends State<TextInputField> {
+  bool _isObscure = true;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,6 +20,8 @@ class TextInputField extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: Color(0xFF6B6B6B), width: 2)),
         child: TextFormField(
+          keyboardType: TextInputType.emailAddress,
+          obscureText: _isObscure,
           decoration: InputDecoration(border: InputBorder.none),
         ),
       ),

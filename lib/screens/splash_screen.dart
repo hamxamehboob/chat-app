@@ -1,3 +1,4 @@
+import 'package:chat_app/screens/login_screen.dart';
 import 'package:chat_app/widgets/text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -76,8 +77,15 @@ class _SplashScreenState extends State<SplashScreen> {
               SizedBox(
                 height: screenHeight * 0.03,
               ),
-              const ActionButton(
+              ActionButton(
                 label: 'Get Started',
+                route: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const Login(),
+                    ),
+                  );
+                },
               ),
             ],
           ),

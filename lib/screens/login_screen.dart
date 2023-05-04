@@ -1,6 +1,5 @@
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:chat_app/widgets/text_button.dart';
-import 'package:chat_app/widgets/text_input_field.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -12,6 +11,8 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool _isObscure = true;
+  final GlobalKey<FormState> _pwKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +30,11 @@ class _LoginState extends State<Login> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => SplashScreen(),
+                      builder: (_) => const SplashScreen(),
                     ),
                   );
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_circle_left_outlined,
                   size: 30,
                 ),
@@ -42,7 +43,7 @@ class _LoginState extends State<Login> {
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       Text(
                         "Hello, Welcome Back",
                         style: TextStyle(
@@ -57,59 +58,59 @@ class _LoginState extends State<Login> {
                   ),
                 ],
               ),
-              Container(
-                padding: EdgeInsets.only(left: 21, right: 21),
-                margin: EdgeInsets.only(left: 20, right: 21),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Color(0xFF6B6B6B), width: 2),
-                ),
-                child: TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Enter your Email Address"),
+              Padding(
+                padding: const EdgeInsets.only(top: 2, left: 23, right: 21),
+                child: Form(
+                  key: _emailKey,
+                  child: TextFormField(
+                    validator: emailValidate,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        hintText: "Enter your Email Address"),
+                  ),
                 ),
               ),
               SizedBox(
                 height: screenHeight * 0.02,
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 7),
-                child: Container(
-                  padding: EdgeInsets.only(left: 21, right: 21, top: 3),
-                  margin: EdgeInsets.only(left: 20, right: 21),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Color(0xFF6B6B6B), width: 2)),
+                padding: const EdgeInsets.only(top: 2, left: 23, right: 21),
+                child: Form(
+                  key: _pwKey,
                   child: TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    obscureText: _isObscure,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Enter your Password",
-                      suffixIcon: IconButton(
-                        color: Color(0xFF771F98),
-                        icon: Icon(
-                          _isObscure ? Icons.visibility : Icons.visibility_off,
+                      keyboardType: TextInputType.emailAddress,
+                      obscureText: _isObscure,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        onPressed: () {
-                          setState(
-                            () {
-                              _isObscure = !_isObscure;
-                            },
-                          );
-                        },
+                        hintText: "Enter your Password",
+                        suffixIcon: IconButton(
+                          color: const Color(0xFF771F98),
+                          icon: Icon(
+                            _isObscure
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(
+                              () {
+                                _isObscure = !_isObscure;
+                              },
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ),
+                      validator: pwValidate),
                 ),
               ),
               SizedBox(
                 height: screenHeight * 0.013,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 200, right: 29),
+              const Padding(
+                padding: EdgeInsets.only(left: 200, right: 29),
                 child: Text(
                   "Forgot Password?",
                   style: TextStyle(
@@ -123,6 +124,9 @@ class _LoginState extends State<Login> {
               ),
               ActionButton(
                 label: 'Login',
+                route: () {
+                  validate();
+                },
               ),
               SizedBox(
                 height: screenHeight * 0.08,
@@ -131,13 +135,13 @@ class _LoginState extends State<Login> {
                 padding: const EdgeInsets.only(left: 45, right: 60),
                 child: Row(
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: Divider(color: Color(0xFF949494), thickness: 1),
                     ),
                     SizedBox(
                       width: screenWeight * 0.03,
                     ),
-                    Text(
+                    const Text(
                       "Or Login with",
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
@@ -145,7 +149,7 @@ class _LoginState extends State<Login> {
                     SizedBox(
                       width: screenWeight * 0.03,
                     ),
-                    Expanded(
+                    const Expanded(
                       child: Divider(
                         color: Color(0xFF949494),
                         thickness: 1,
@@ -176,5 +180,32 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  void validate() {
+    if (_pwKey.currentState!.validate() ||
+        _emailKey.currentState!.validate()) {}
+  }
+
+  String? emailValidate(value) {
+    if (value.isEmpty) {
+      return "Field Can't be Empty";
+    } else if (!RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+\.[a-zA-Z]+")
+        .hasMatch(value)) {
+      return "Enter Valid Email";
+    } else {
+      return null;
+    }
+  }
+
+  String? pwValidate(value) {
+    if (value.isEmpty) {
+      return "Field Can't be Empty";
+    } else if (value.length < 6) {
+      return "At least 6 character required";
+    } else {
+      return null;
+    }
   }
 }

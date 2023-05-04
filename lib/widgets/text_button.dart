@@ -1,20 +1,14 @@
-import 'package:chat_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class ActionButton extends StatelessWidget {
-  const ActionButton({Key? key, required this.label, }) : super(key: key);
+  const ActionButton({Key? key, required this.label, required this.route, }) : super(key: key);
   final String label;
+  final GestureTapCallback route;
   @override
   Widget build(BuildContext context) {
     return Center(
       child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => const Login(),
-            ),
-          );
-        },
+        onTap: route,
         child: Container(
           padding:
               const EdgeInsets.only(left: 90, right: 90, top: 8, bottom: 8),

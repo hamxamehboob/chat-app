@@ -1,6 +1,9 @@
 # Chat App
  I have Created an Chat App Using Flutter Framework and Firebase for real time messaging.
  
+ Figma Design Link:
+ https://www.figma.com/file/MKTZQr6L5vrkawh4TH2OOL/chatting-app-(Community)?node-id=3%3A380&t=IR5WcufTJDd4sfl4-1
+ 
 # Technology Used:
 <td><img src="https://user-images.githubusercontent.com/97390895/235965693-3a62b4cb-f6e8-4fb2-99c8-8ae609b65da6.png" width="50%"></img></td> 
 <td><img src="https://user-images.githubusercontent.com/97390895/235966968-5baa58b8-8f13-4133-8156-1cc6edae66f3.png" width="50%"></img></td>

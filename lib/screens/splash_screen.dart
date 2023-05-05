@@ -18,6 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Padding(
           padding: const EdgeInsets.only(top: 50, left: 23),
           child: Column(

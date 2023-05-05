@@ -2,14 +2,14 @@ import 'package:chat_app/screens/splash_screen.dart';
 import 'package:chat_app/widgets/text_button.dart';
 import 'package:flutter/material.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class SignUp extends StatefulWidget {
+  const SignUp({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpState extends State<SignUp> {
   bool _isObscure = true;
   final GlobalKey<FormState> _pwKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
@@ -45,7 +45,7 @@ class _LoginState extends State<Login> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
                       Text(
-                        "Hello, Welcome Back",
+                        "Let's,Sign you up",
                         style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 24),
                       ),
@@ -54,17 +54,32 @@ class _LoginState extends State<Login> {
                     ],
                   ),
                   Expanded(
-                    child: Image.asset("assets/images/LoginScreen_image.png"),
+                    child: Image.asset(
+                      "assets/images/LoginScreen_image.png",
+                      height: screenHeight * 0.25,
+                    ),
                   ),
                 ],
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 2, left: 23, right: 21),
                 child: Form(
-                  // autovalidateMode: AutovalidateMode.always,
+                  // key: _emailKey,
+                  child: TextFormField(
+                    validator: emailValidate,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        hintText: "Enter your Full Name"),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, left: 23, right: 21),
+                child: Form(
                   key: _emailKey,
                   child: TextFormField(
-
                     validator: emailValidate,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
@@ -74,13 +89,9 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: screenHeight * 0.02,
-              ),
               Padding(
-                padding: const EdgeInsets.only(top: 2, left: 23, right: 21),
+                padding: const EdgeInsets.only(top: 10, left: 23, right: 21),
                 child: Form(
-                  // autovalidateMode: AutovalidateMode.always,
                   key: _pwKey,
                   child: TextFormField(
                       keyboardType: TextInputType.emailAddress,
@@ -112,27 +123,20 @@ class _LoginState extends State<Login> {
               SizedBox(
                 height: screenHeight * 0.013,
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 200, right: 29),
-                child: Text(
-                  "Forgot Password?",
-                  style: TextStyle(
-                      color: Color(0xFF993F3F),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 13),
-                ),
-              ),
-              SizedBox(
-                height: screenHeight * 0.042,
-              ),
               ActionButton(
-                label: 'Login',
+                label: 'SignUp',
                 route: () {
                   validate();
                 },
               ),
               SizedBox(
                 height: screenHeight * 0.08,
+              ),
+              const Text(
+                "Already Have an account?",
+                style: TextStyle(
+                  
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 45, right: 60),
@@ -145,7 +149,7 @@ class _LoginState extends State<Login> {
                       width: screenWeight * 0.03,
                     ),
                     const Text(
-                      "Or Login with",
+                      "Or SignUp with",
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                     ),

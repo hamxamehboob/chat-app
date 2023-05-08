@@ -1,3 +1,4 @@
+import 'package:chat_app/screens/login_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:chat_app/widgets/text_button.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class _SignUpState extends State<SignUp> {
   bool _isObscure = true;
   final GlobalKey<FormState> _pwKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _nameKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +66,10 @@ class _SignUpState extends State<SignUp> {
               Padding(
                 padding: const EdgeInsets.only(top: 2, left: 23, right: 21),
                 child: Form(
-                  // key: _emailKey,
+                  key: _nameKey,
                   child: TextFormField(
-                    validator: emailValidate,
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: nameValidate,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -80,6 +83,7 @@ class _SignUpState extends State<SignUp> {
                 child: Form(
                   key: _emailKey,
                   child: TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
                     validator: emailValidate,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
@@ -121,7 +125,36 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               SizedBox(
-                height: screenHeight * 0.013,
+                height: screenHeight * 0.032,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Already have an account?",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  SizedBox(
+                    width: screenWeight * 0.015,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        (context),
+                        MaterialPageRoute(
+                          builder: (_) => Login(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Login",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: screenHeight * 0.011,
               ),
               ActionButton(
                 label: 'SignUp',
@@ -131,12 +164,6 @@ class _SignUpState extends State<SignUp> {
               ),
               SizedBox(
                 height: screenHeight * 0.08,
-              ),
-              const Text(
-                "Already Have an account?",
-                style: TextStyle(
-                  
-                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 45, right: 60),
@@ -191,6 +218,7 @@ class _SignUpState extends State<SignUp> {
 
   void validate() {
     if (_pwKey.currentState!.validate() ||
+        _nameKey.currentState!.validate() ||
         _emailKey.currentState!.validate()) {}
   }
 
@@ -209,8 +237,16 @@ class _SignUpState extends State<SignUp> {
   String? pwValidate(value) {
     if (value.isEmpty) {
       return "Please enter a password";
-    } else if (value.length < 6) {
+    } else if (value.length < 8) {
       return "Password must be at least 8 characters";
+    } else {
+      return null;
+    }
+  }
+
+  String? nameValidate(value) {
+    if (value.isEmpty) {
+      return "Please enter a name";
     } else {
       return null;
     }

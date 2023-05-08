@@ -1,3 +1,4 @@
+import 'package:chat_app/screens/sign_up_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:chat_app/widgets/text_button.dart';
 import 'package:flutter/material.dart';
@@ -61,10 +62,9 @@ class _LoginState extends State<Login> {
               Padding(
                 padding: const EdgeInsets.only(top: 2, left: 23, right: 21),
                 child: Form(
-                  // autovalidateMode: AutovalidateMode.always,
+                  autovalidateMode: AutovalidateMode.always,
                   key: _emailKey,
                   child: TextFormField(
-
                     validator: emailValidate,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
@@ -80,7 +80,6 @@ class _LoginState extends State<Login> {
               Padding(
                 padding: const EdgeInsets.only(top: 2, left: 23, right: 21),
                 child: Form(
-                  // autovalidateMode: AutovalidateMode.always,
                   key: _pwKey,
                   child: TextFormField(
                       keyboardType: TextInputType.emailAddress,
@@ -124,6 +123,35 @@ class _LoginState extends State<Login> {
               ),
               SizedBox(
                 height: screenHeight * 0.042,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Don't have an account?",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  SizedBox(
+                    width: screenWeight * 0.015,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        (context),
+                        MaterialPageRoute(
+                          builder: (_) => SignUp(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Register",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: screenHeight * 0.011,
               ),
               ActionButton(
                 label: 'Login',
@@ -205,7 +233,7 @@ class _LoginState extends State<Login> {
   String? pwValidate(value) {
     if (value.isEmpty) {
       return "Please enter a password";
-    } else if (value.length < 6) {
+    } else if (value.length < 8) {
       return "Password must be at least 8 characters";
     } else {
       return null;

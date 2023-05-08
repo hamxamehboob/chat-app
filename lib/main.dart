@@ -1,10 +1,13 @@
-import 'package:chat_app/screens/sign_up_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'firebase_options.dart';
 
 void main() {
+  _initializeFirebase();
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
@@ -23,7 +26,13 @@ class MyApp extends StatelessWidget {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       debugShowCheckedModeBanner: false,
-      home: const SignUp(),
+      home: const SplashScreen(),
     );
   }
+}
+
+_initializeFirebase() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }

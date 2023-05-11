@@ -16,11 +16,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Padding(
-          padding: const EdgeInsets.only(top: 50, left: 23),
+          padding: const EdgeInsets.only(top: 40, left: 23),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -51,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen> {
               Padding(
                 padding: const EdgeInsets.only(right: 23),
                 child: SizedBox(
-                  height: 400,
+                  height: screenHeight * 0.5,
                   child: PageView(
                     controller: _controller,
                     children: [

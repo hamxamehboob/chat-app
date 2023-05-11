@@ -1,3 +1,4 @@
+import 'package:chat_app/screens/auth_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
@@ -7,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   _initializeFirebase();
   runApp(
     DevicePreview(

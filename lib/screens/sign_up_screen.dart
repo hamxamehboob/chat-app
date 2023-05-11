@@ -1,6 +1,8 @@
+import 'package:chat_app/screens/home_screen.dart';
 import 'package:chat_app/screens/login_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:chat_app/widgets/text_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
@@ -15,6 +17,8 @@ class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _pwKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _nameKey = GlobalKey<FormState>();
+  final TextEditingController _emailTeextController = TextEditingController();
+  final TextEditingController _pwTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,191 +29,207 @@ class _SignUpState extends State<SignUp> {
         resizeToAvoidBottomInset: false,
         body: Padding(
           padding: const EdgeInsets.only(left: 27, top: 19),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => const SplashScreen(),
-                    ),
-                  );
-                },
-                child: const Icon(
-                  Icons.arrow_circle_left_outlined,
-                  size: 30,
-                ),
-              ),
-              Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        "Let's,Sign you up",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 24),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const SplashScreen(),
                       ),
-                      Text(
-                          "Happy to see you again,to use your\naccount please login first.")
-                    ],
-                  ),
-                  Expanded(
-                    child: Image.asset(
-                      "assets/images/LoginScreen_image.png",
-                      height: screenHeight * 0.25,
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 2, left: 23, right: 21),
-                child: Form(
-                  key: _nameKey,
-                  child: TextFormField(
-                    autovalidateMode: AutovalidateMode.always,
-                    validator: nameValidate,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        hintText: "Enter your Full Name"),
+                    );
+                  },
+                  child: const Icon(
+                    Icons.arrow_circle_left_outlined,
+                    size: 30,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 23, right: 21),
-                child: Form(
-                  key: _emailKey,
-                  child: TextFormField(
-                    autovalidateMode: AutovalidateMode.always,
-                    validator: emailValidate,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        hintText: "Enter your Email Address"),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 23, right: 21),
-                child: Form(
-                  key: _pwKey,
-                  child: TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      obscureText: _isObscure,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        hintText: "Enter your Password",
-                        suffixIcon: IconButton(
-                          color: const Color(0xFF771F98),
-                          icon: Icon(
-                            _isObscure
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(
-                              () {
-                                _isObscure = !_isObscure;
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                      validator: pwValidate),
-                ),
-              ),
-              SizedBox(
-                height: screenHeight * 0.032,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Already have an account?",
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  SizedBox(
-                    width: screenWeight * 0.015,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        (context),
-                        MaterialPageRoute(
-                          builder: (_) => Login(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Login",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: screenHeight * 0.011,
-              ),
-              ActionButton(
-                label: 'SignUp',
-                route: () {
-                  validate();
-                },
-              ),
-              SizedBox(
-                height: screenHeight * 0.08,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 45, right: 60),
-                child: Row(
+                Row(
                   children: [
-                    const Expanded(
-                      child: Divider(color: Color(0xFF949494), thickness: 1),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          "Let's,Sign you up",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 24),
+                        ),
+                        Text(
+                            "Happy to see you again,to use your\naccount please login first.")
+                      ],
                     ),
-                    SizedBox(
-                      width: screenWeight * 0.03,
-                    ),
-                    const Text(
-                      "Or SignUp with",
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-                    ),
-                    SizedBox(
-                      width: screenWeight * 0.03,
-                    ),
-                    const Expanded(
-                      child: Divider(
-                        color: Color(0xFF949494),
-                        thickness: 1,
+                    Expanded(
+                      child: Image.asset(
+                        "assets/images/LoginScreen_image.png",
+                        height: screenHeight * 0.25,
                       ),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: screenHeight * 0.04,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("assets/images/google_icon.png"),
-                  SizedBox(
-                    width: screenWeight * 0.03,
+                Padding(
+                  padding: const EdgeInsets.only(top: 2, left: 23, right: 21),
+                  child: Form(
+                    key: _nameKey,
+                    child: TextFormField(
+                      validator: nameValidate,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          hintText: "Enter your Full Name"),
+                    ),
                   ),
-                  Image.asset("assets/images/iphone_icon.png"),
-                  SizedBox(
-                    width: screenWeight * 0.03,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 23, right: 21),
+                  child: Form(
+                    key: _emailKey,
+                    child: TextFormField(
+                      controller: _emailTeextController,
+                      // autovalidateMode: AutovalidateMode.always,
+                      validator: emailValidate,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          hintText: "Enter your Email Address"),
+                    ),
                   ),
-                  Image.asset("assets/images/fb_icon.png"),
-                ],
-              )
-            ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 23, right: 21),
+                  child: Form(
+                    key: _pwKey,
+                    child: TextFormField(
+                        controller: _pwTextController,
+                        keyboardType: TextInputType.emailAddress,
+                        obscureText: _isObscure,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          hintText: "Enter your Password",
+                          suffixIcon: IconButton(
+                            color: const Color(0xFF771F98),
+                            icon: Icon(
+                              _isObscure
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(
+                                () {
+                                  _isObscure = !_isObscure;
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                        validator: pwValidate),
+                  ),
+                ),
+                SizedBox(
+                  height: screenHeight * 0.032,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Already have an account?",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    SizedBox(
+                      width: screenWeight * 0.015,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          (context),
+                          MaterialPageRoute(
+                            builder: (_) => Login(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Login",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: screenHeight * 0.011,
+                ),
+                ActionButton(
+                  label: 'SignUp',
+                  route: () {
+                    validate();
+                    FirebaseAuth.instance
+                        .createUserWithEmailAndPassword(
+                            email: _emailTeextController.text,
+                            password: _pwTextController.text)
+                        .then(
+                          (value) => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => HomePage(),
+                            ),
+                          ),
+                        )
+                        .onError((error, stackTrace) =>
+                            {print("Error ${error.toString()}")});
+                  },
+                ),
+                SizedBox(
+                  height: screenHeight * 0.08,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 45, right: 60),
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: Divider(color: Color(0xFF949494), thickness: 1),
+                      ),
+                      SizedBox(
+                        width: screenWeight * 0.03,
+                      ),
+                      const Text(
+                        "Or SignUp with",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w400),
+                      ),
+                      SizedBox(
+                        width: screenWeight * 0.03,
+                      ),
+                      const Expanded(
+                        child: Divider(
+                          color: Color(0xFF949494),
+                          thickness: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: screenHeight * 0.04,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset("assets/images/google_icon.png"),
+                    SizedBox(
+                      width: screenWeight * 0.03,
+                    ),
+                    Image.asset("assets/images/iphone_icon.png"),
+                    SizedBox(
+                      width: screenWeight * 0.03,
+                    ),
+                    Image.asset("assets/images/fb_icon.png"),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

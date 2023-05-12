@@ -163,24 +163,11 @@ class _SignUpState extends State<SignUp> {
                   height: screenHeight * 0.011,
                 ),
                 ActionButton(
-                  label: 'SignUp',
-                  route: () {
-                    validate();
-                    FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
-                            email: _emailTeextController.text,
-                            password: _pwTextController.text)
-                        .then(
-                          (value) => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => HomePage(),
-                            ),
-                          ),
-                        )
-                        .onError((error, stackTrace) =>
-                            {print("Error ${error.toString()}")});
-                  },
-                ),
+                    label: 'SignUp',
+                    route: () {
+                      validate();
+                      SignUp();
+                    }),
                 SizedBox(
                   height: screenHeight * 0.08,
                 ),
@@ -270,5 +257,33 @@ class _SignUpState extends State<SignUp> {
     } else {
       return null;
     }
+  }
+
+  void SignUp() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _emailTeextController.text,
+              password: _pwTextController.text)
+          .then(
+            (value) => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => HomePage(),
+              ),
+            ),
+          )
+          .onError(
+            (error, stackTrace) => print("Error ${error.toString()}"),
+          );
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {}
   }
 }

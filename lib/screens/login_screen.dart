@@ -4,6 +4,7 @@ import 'package:chat_app/screens/splash_screen.dart';
 import 'package:chat_app/widgets/text_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -163,17 +164,7 @@ class _LoginState extends State<Login> {
                 ActionButton(
                   label: 'Login',
                   route: () {
-                    FirebaseAuth.instance
-                        .signInWithEmailAndPassword(
-                            email: _emailtextcontroller.text,
-                            password: _pwtextcontroller.text)
-                        .then((value) => {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => HomePage(),
-                                ),
-                              )
-                            });
+                    Login();
                     validate();
                   },
                 ),
@@ -213,7 +204,8 @@ class _LoginState extends State<Login> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset("assets/images/google_icon.png"),
+                    GestureDetector(
+                        child: Image.asset("assets/images/google_icon.png")),
                     SizedBox(
                       width: screenWeight * 0.03,
                     ),
@@ -260,7 +252,65 @@ class _LoginState extends State<Login> {
   }
 
   void Login() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailtextcontroller.text, password: _pwtextcontroller.text);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _emailtextcontroller.text,
+              password: _pwtextcontroller.text)
+          .then(
+            (value) => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => HomePage(),
+              ),
+            ),
+          )
+          .onError((error, stackTrace) => null);
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      if (e.code == 'user-not-found') {
+        wrongEmailDialog();
+      } else if (e.code == 'wrong - password') {
+        wrongPasswordDialog();
+      }
+    }
   }
+
+  void wrongEmailDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Wrong Email"),
+          );
+        });
+  }
+
+  void wrongPasswordDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Wrong Password"),
+          );
+        });
+  }
+// signInWithGoogle() async{
+//   GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+//   GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+//  AuthCredential credential =  GoogleAuthProvider.credential(
+//     accessToken: googleAuth?.accessToken ,
+//     idToken:googleAuth?.idToken
+//   );
+//  UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+//  print(userCredential.user?.displayName);
+// }
 }

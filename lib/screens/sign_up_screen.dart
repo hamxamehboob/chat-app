@@ -4,6 +4,7 @@ import 'package:chat_app/screens/splash_screen.dart';
 import 'package:chat_app/widgets/text_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -22,8 +23,14 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWeight = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double screenWeight = MediaQuery
+        .of(context)
+        .size
+        .width;
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -120,7 +127,7 @@ class _SignUpState extends State<SignUp> {
                             ),
                             onPressed: () {
                               setState(
-                                () {
+                                    () {
                                   _isObscure = !_isObscure;
                                 },
                               );
@@ -204,7 +211,9 @@ class _SignUpState extends State<SignUp> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset("assets/images/google_icon.png"),
+                    GestureDetector(onTap: () {
+                      signInWithGoogle();
+                    }, child: Image.asset("assets/images/google_icon.png")),
                     SizedBox(
                       width: screenWeight * 0.03,
                     ),
@@ -233,7 +242,7 @@ class _SignUpState extends State<SignUp> {
     if (value.isEmpty) {
       return "Please enter a email";
     } else if (!RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+\.[a-zA-Z]+")
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+\.[a-zA-Z]+")
         .hasMatch(value)) {
       return "Enter Valid Email";
     } else {
@@ -271,19 +280,39 @@ class _SignUpState extends State<SignUp> {
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-              email: _emailTeextController.text,
-              password: _pwTextController.text)
+          email: _emailTeextController.text,
+          password: _pwTextController.text)
           .then(
-            (value) => Navigator.of(context).push(
+            (value) =>
+            Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => HomePage(),
               ),
             ),
-          )
+      )
           .onError(
             (error, stackTrace) => print("Error ${error.toString()}"),
-          );
+      );
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {}
+  }
+
+  signInWithGoogle() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+    UserCredential userCredential =
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+    print(userCredential.user?.displayName);
   }
 }

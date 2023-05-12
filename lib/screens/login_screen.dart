@@ -205,6 +205,9 @@ class _LoginState extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
+                        onTap: () {
+                          signInWithGoogle();
+                        },
                         child: Image.asset("assets/images/google_icon.png")),
                     SizedBox(
                       width: screenWeight * 0.03,
@@ -303,14 +306,15 @@ class _LoginState extends State<Login> {
           );
         });
   }
-// signInWithGoogle() async{
-//   GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-//   GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-//  AuthCredential credential =  GoogleAuthProvider.credential(
-//     accessToken: googleAuth?.accessToken ,
-//     idToken:googleAuth?.idToken
-//   );
-//  UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-//  print(userCredential.user?.displayName);
-// }
+
+  signInWithGoogle() async {
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+    print(userCredential.user?.displayName);
+  }
 }

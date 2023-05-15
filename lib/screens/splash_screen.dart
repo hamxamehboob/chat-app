@@ -1,7 +1,9 @@
-import 'package:chat_app/screens/login_screen.dart';
 import 'package:chat_app/widgets/text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+
+import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

@@ -315,4 +315,7 @@ class _SignUpState extends State<SignUp> {
     Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
     print(userCredential.user?.displayName);
   }
+  // Future<UserCredential> signInFacebook() async{
+  //   final Login
+  // }
 }

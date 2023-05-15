@@ -1,4 +1,5 @@
 import 'package:chat_app/screens/auth_screen.dart';
+import 'package:chat_app/screens/home_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
@@ -24,7 +25,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       debugShowCheckedModeBanner: false,

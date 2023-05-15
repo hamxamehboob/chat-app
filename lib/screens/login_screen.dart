@@ -4,6 +4,7 @@ import 'package:chat_app/screens/splash_screen.dart';
 import 'package:chat_app/widgets/text_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
@@ -216,7 +217,11 @@ class _LoginState extends State<Login> {
                     SizedBox(
                       width: screenWeight * 0.03,
                     ),
-                    Image.asset("assets/images/fb_icon.png"),
+                    GestureDetector(
+                        onTap: () {
+                          signInWithFacebook();
+                        },
+                        child: Image.asset("assets/images/fb_icon.png")),
                   ],
                 )
               ],
@@ -275,11 +280,14 @@ class _LoginState extends State<Login> {
               ),
             ),
           )
-          .onError((error, stackTrace) => null);
+          .onError(
+            (error, stackTrace) => print("Error========= ${error.toString()}"),
+          );
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       if (e.code == 'user-not-found') {
+        print("NO USER FOUND");
         wrongEmailDialog();
       } else if (e.code == 'wrong - password') {
         wrongPasswordDialog();
@@ -289,32 +297,59 @@ class _LoginState extends State<Login> {
 
   void wrongEmailDialog() {
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Wrong Email"),
-          );
-        });
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Wrong Email"),
+        );
+      },
+    );
   }
 
   void wrongPasswordDialog() {
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Wrong Password"),
-          );
-        });
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Wrong Password"),
+        );
+      },
+    );
   }
 
   signInWithGoogle() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
     AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => HomePage(),
+      ),
+    );
     print(userCredential.user?.displayName);
+  }
+
+  Future<UserCredential> signInWithFacebook() async {
+    // Trigger the sign-in flow
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+    // Once signed in, return the UserCredential
+    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
   }
 }

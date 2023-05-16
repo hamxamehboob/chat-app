@@ -9,6 +9,7 @@
  <img src="https://github.com/devicons/devicon/blob/master/icons/flutter/flutter-original.svg" title="Flutter" alt="Flutter" width="40" height="60"/>&nbsp;
   <img src="https://github.com/devicons/devicon/blob/master/icons/firebase/firebase-plain-wordmark.svg" title="firebase" alt="firebase" width="40" height="60"/>&nbsp;
 </div>
+
 # Steps to use App:
 * The User will download the app and install in the mobile.
 * User will see a splash screen where the user will tap the GET STARTED button to go to login Page.

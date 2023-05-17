@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../widgets/google_button.dart';
+
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
@@ -208,22 +210,9 @@ class _SignUpState extends State<SignUp> {
                 SizedBox(
                   height: screenHeight * 0.04,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(onTap: () {
-                      signInWithGoogle();
-                    }, child: Image.asset("assets/images/google_icon.png")),
-                    SizedBox(
-                      width: screenWeight * 0.03,
-                    ),
-                    Image.asset("assets/images/iphone_icon.png"),
-                    SizedBox(
-                      width: screenWeight * 0.03,
-                    ),
-                    Image.asset("assets/images/fb_icon.png"),
-                  ],
-                )
+                GoogleButton(
+                  route:(){ signInWithGoogle();},
+                ),
               ],
             ),
           ),
@@ -237,7 +226,6 @@ class _SignUpState extends State<SignUp> {
         _nameKey.currentState!.validate() ||
         _emailKey.currentState!.validate()) {}
   }
-
   String? emailValidate(value) {
     if (value.isEmpty) {
       return "Please enter a email";
@@ -315,7 +303,4 @@ class _SignUpState extends State<SignUp> {
     Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
     print(userCredential.user?.displayName);
   }
-  // Future<UserCredential> signInFacebook() async{
-  //   final Login
-  // }
 }

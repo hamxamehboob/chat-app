@@ -1,4 +1,5 @@
 import 'package:chat_app/screens/auth_screen.dart';
+import 'package:chat_app/screens/chat_screen.dart';
 import 'package:chat_app/screens/home_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:device_preview/device_preview.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      home: const HomePage(),
     );
   }
 }

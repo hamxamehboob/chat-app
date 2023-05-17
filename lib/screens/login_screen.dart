@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../widgets/google_button.dart';
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -20,6 +22,7 @@ class _LoginState extends State<Login> {
   final GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
   final TextEditingController _emailtextcontroller = TextEditingController();
   final TextEditingController _pwtextcontroller = TextEditingController();
+  String errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -165,12 +168,12 @@ class _LoginState extends State<Login> {
                 ActionButton(
                   label: 'Login',
                   route: () {
-                    Login();
                     validate();
+                    Login();
                   },
                 ),
                 SizedBox(
-                  height: screenHeight * 0.08,
+                  height: screenHeight * 0.05,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 45, right: 60),
@@ -202,28 +205,13 @@ class _LoginState extends State<Login> {
                 SizedBox(
                   height: screenHeight * 0.04,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                        onTap: () {
-                          signInWithGoogle();
-                        },
-                        child: Image.asset("assets/images/google_icon.png")),
-                    SizedBox(
-                      width: screenWeight * 0.03,
-                    ),
-                    Image.asset("assets/images/iphone_icon.png"),
-                    SizedBox(
-                      width: screenWeight * 0.03,
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          signInWithFacebook();
-                        },
-                        child: Image.asset("assets/images/fb_icon.png")),
-                  ],
-                )
+                GoogleButton(
+                  route:(){ signInWithGoogle();},
+                ),
+
+                // Center(
+                //   child: Text(errorMessage),
+                // )
               ],
             ),
           ),
@@ -252,8 +240,6 @@ class _LoginState extends State<Login> {
   String? pwValidate(value) {
     if (value.isEmpty) {
       return "Please enter a password";
-    } else if (value.length < 8) {
-      return "Password must be at least 8 characters";
     } else {
       return null;
     }
@@ -281,8 +267,13 @@ class _LoginState extends State<Login> {
             ),
           )
           .onError(
-            (error, stackTrace) => print("Error========= ${error.toString()}"),
-          );
+        (error, stackTrace) {
+          print("Error========= ${error.toString()}");
+          errorMessage = '';
+          errorMessage = error.toString();
+        },
+      );
+
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
@@ -293,6 +284,7 @@ class _LoginState extends State<Login> {
         wrongPasswordDialog();
       }
     }
+    setState(() {});
   }
 
   void wrongEmailDialog() {

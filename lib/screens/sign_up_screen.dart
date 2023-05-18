@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../api/firebase_api.dart';
 import '../widgets/google_button.dart';
 
 class SignUp extends StatefulWidget {
@@ -294,13 +295,21 @@ class _SignUpState extends State<SignUp> {
         );
       },
     );
+    if ((await APIs.userExists())) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => HomePage()));
+    } else {
+      await APIs.createUser().then((value) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => HomePage()));
+      });
+    }
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
     AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
     UserCredential userCredential =
     await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
     print(userCredential.user?.displayName);
   }
 }

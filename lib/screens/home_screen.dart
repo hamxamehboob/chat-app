@@ -39,12 +39,12 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.white,
           items: <Widget>[
             Icon(
-              Icons.home,
+              Icons.person,
               size: 30,
               color: Colors.white,
             ),
             Icon(
-              Icons.person,
+              Icons.chat,
               color: Colors.white,
               size: 30,
             ),
@@ -129,17 +129,12 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  void logout() async {
-    FirebaseAuth.instance.signOut().then(
-          (value) {
-        print("SIgnoutSuccessfully");
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => SplashScreen(),
-          ),
-        );
-      },
-    );
-  }
+  // void logout() async {
+  //   await APIs.auth.signOut().then((value){
+  //     await GoogleSignIN
+  //   });
+  //
+  //
+  //
+  // }
 }

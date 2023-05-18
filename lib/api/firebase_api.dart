@@ -10,7 +10,7 @@ class APIs {
   static User get user => auth.currentUser!;
 
   static Future<bool> userExists() async {
-    return (await firestore.collection('users').doc(user.uid).get()).exists;
+    return (await firestore.collection('Users').doc(user.uid).get()).exists;
   }
 
   static Future<void> createUser() async {
@@ -24,7 +24,7 @@ class APIs {
         email: user.email.toString(),
         pushToken: '');
     return await firestore
-        .collection('users')
+        .collection('Users')
         .doc(user.uid)
         .set(chatUser.toJson());
   }

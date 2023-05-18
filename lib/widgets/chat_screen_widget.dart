@@ -24,7 +24,7 @@ class _ChatWidgetState extends State<ChatWidget> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => ChattingScreen(),
+              builder: (_) => ChattingScreen(user: widget.user,),
             ),
           );
         },

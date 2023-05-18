@@ -1,4 +1,3 @@
-
 import 'package:chat_app/screens/setting_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:chat_app/widgets/chat_screen_widget.dart';
@@ -19,13 +18,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<ChatUser> list = [];
+  final List<ChatUser> _searchList = [];
+  bool _isSearching = false;
   int _selectedIndex = 0;
   List<Widget> _screens = [
     SplashScreen(),
     SettingPage(),
   ];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,14 +68,33 @@ class _HomePageState extends State<HomePage> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 14),
                     child: TextField(
+                      autofocus: true,
                       decoration: InputDecoration(
-                          border: InputBorder.none,
-                          icon: Icon(
-                            Icons.search,
-                            color: Colors.black,
-                          ),
-                          hintText: "Search",
-                          hintStyle: TextStyle(color: Color(0xFF252525))),
+                        border: InputBorder.none,
+                        icon: Icon(
+                          Icons.search,
+                          color: Colors.black,
+                        ),
+                        hintText: "Search",
+                        hintStyle: TextStyle(
+                          color: Color(0xFF252525),
+                        ),
+                      ),
+                      onChanged: (val) {
+                        _searchList.clear();
+                        for (var i in list) {
+                          if (i.name
+                                  .toLowerCase()
+                                  .contains(val.toLowerCase()) ||
+                              i.email.toLowerCase().contains(val.toLowerCase())){
+                            _searchList.add(i);
+                          }
+                          setState(() {
+                            _searchList;
+                          });
+
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -92,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Expanded(
                   child: StreamBuilder(
-                      stream: APIs.firestore.collection('Users').snapshots(),
+                      stream: APIs.getAllUser(),
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
@@ -103,23 +121,28 @@ class _HomePageState extends State<HomePage> {
                           case ConnectionState.active:
                           case ConnectionState.done:
                             final data = snapshot.data?.docs;
-                            list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+                            list = data
+                                    ?.map((e) => ChatUser.fromJson(e.data()))
+                                    .toList() ??
+                                [];
                         }
-                       if(list.isNotEmpty){
-                         return ListView.builder(
-
-                           shrinkWrap: true,
-                           scrollDirection: Axis.vertical,
-                           physics: BouncingScrollPhysics(),
-                           itemCount: list.length,
-                           itemBuilder: (BuildContext context, int index) {
-                             return ChatWidget(user: list[index],);
-                           },
-                         );
-                       }
-                       else{
-                         return Center(child: Text("No Messages Found"),);
-                       }
+                        if (list.isNotEmpty) {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            physics: BouncingScrollPhysics(),
+                            itemCount: _isSearching ? _searchList.length : list.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ChatWidget(
+                                user: _isSearching ? _searchList[index] :list[index],
+                              );
+                            },
+                          );
+                        } else {
+                          return Center(
+                            child: Text("No Messages Found"),
+                          );
+                        }
                       }),
                 )
               ],
@@ -129,12 +152,12 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  // void logout() async {
-  //   await APIs.auth.signOut().then((value){
-  //     await GoogleSignIN
-  //   });
-  //
-  //
-  //
-  // }
+// void logout() async {
+//   await APIs.auth.signOut().then((value){
+//     await GoogleSignIN
+//   });
+//
+//
+//
+// }
 }

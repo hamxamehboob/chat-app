@@ -321,6 +321,13 @@ class _LoginState extends State<Login> {
         );
       },
     );
+
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
     if ((await APIs.userExists())) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => HomePage()));
@@ -330,13 +337,7 @@ class _LoginState extends State<Login> {
             context, MaterialPageRoute(builder: (_) => HomePage()));
       });
     }
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-    AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-
     print(userCredential.user?.displayName);
   }
+
 }

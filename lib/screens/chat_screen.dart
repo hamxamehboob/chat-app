@@ -1,8 +1,23 @@
+import 'package:chat_app/models/chat_user.dart';
 import 'package:chat_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
-class ChattingScreen extends StatelessWidget {
-  const ChattingScreen({Key? key}) : super(key: key);
+import '../api/firebase_api.dart';
+import '../models/message.dart';
+import '../widgets/message_card.dart';
+
+class ChattingScreen extends StatefulWidget {
+  final ChatUser user;
+
+  const ChattingScreen({Key? key, required this.user}) : super(key: key);
+
+  @override
+  State<ChattingScreen> createState() => _ChattingScreenState();
+}
+
+class _ChattingScreenState extends State<ChattingScreen> {
+  List<Message> _list = [];
+  final _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +84,39 @@ class ChattingScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          Text("HELLO"),
+          StreamBuilder(
+            stream: APIs.getAllMessages(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                case ConnectionState.none:
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                case ConnectionState.active:
+                case ConnectionState.done:
+                  final data = snapshot.data?.docs;
+                  _list =
+                      data?.map((e) => Message.fromJson(e.data())).toList() ??
+                          [];
+
+                  if (_list.isNotEmpty) {
+                    return ListView.builder(
+                        reverse: true,
+                        itemCount: _list.length,
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return MessageCard(message: _list[index]);
+                        });
+                  } else {
+                    return const Center(
+                      child:
+                          Text('Say Hii! 👋', style: TextStyle(fontSize: 20)),
+                    );
+                  }
+              }
+            },
+          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -82,7 +129,9 @@ class ChattingScreen extends StatelessWidget {
                     topRight: Radius.circular(20),
                   )),
               child: Padding(
-                padding: const EdgeInsets.only(left: 20,),
+                padding: const EdgeInsets.only(
+                  left: 20,
+                ),
                 child: TextFormField(
                   textAlignVertical: TextAlignVertical.center,
                   maxLines: 1000,

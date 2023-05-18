@@ -28,4 +28,17 @@ class APIs {
         .doc(user.uid)
         .set(chatUser.toJson());
   }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUser() {
+    return APIs.firestore
+        .collection('Users')
+        .where('id', isNotEqualTo: user.uid)
+        .snapshots();
+  }
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages() {
+    return APIs.firestore
+        .collection('messages')
+        .where('id', isNotEqualTo: user.uid)
+        .snapshots();
+  }
 }

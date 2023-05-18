@@ -1,8 +1,15 @@
+import 'package:chat_app/models/chat_user.dart';
 import 'package:chat_app/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 
-class ChatWidget extends StatelessWidget {
-  const ChatWidget({Key? key}) : super(key: key);
+class ChatWidget extends StatefulWidget {
+  const ChatWidget({Key? key, required this.user}) : super(key: key);
+  final ChatUser user;
+  @override
+  State<ChatWidget> createState() => _ChatWidgetState();
+}
+
+class _ChatWidgetState extends State<ChatWidget> {
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +44,7 @@ class ChatWidget extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      "Robert Fox",
+                      widget.user.name,
                       style: TextStyle(
                           color: Color(0xFF181818),
                           fontWeight: FontWeight.w600,
@@ -56,7 +63,7 @@ class ChatWidget extends StatelessWidget {
                 SizedBox(
                   height: screenHeight * 0.006,
                 ),
-                Text("Hey, let’s play basketball ")
+                Text(widget.user.about)
               ],
             ),
           ),

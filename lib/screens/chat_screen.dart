@@ -9,6 +9,7 @@ class ChattingScreen extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         toolbarHeight: 100,
@@ -68,20 +69,33 @@ class ChattingScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
+          Text("HELLO"),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
+              height: screenHeight * 0.1,
               decoration: BoxDecoration(
+                  boxShadow: [BoxShadow(blurRadius: 2)],
                   color: Color(0xFFF8F8F8),
-                borderRadius: BorderRadius.circular(20)
-              ),
-              height: 100,
-
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  )),
               child: Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: TextField(
+                padding: const EdgeInsets.only(left: 20,),
+                child: TextFormField(
+                  textAlignVertical: TextAlignVertical.center,
+                  maxLines: 1000,
+                  keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                      hintText: "Type Here"
+                    border: InputBorder.none,
+                    hintText: "Type Here...",
+                    hintStyle: TextStyle(
+                        color: Color(0xFF8D8D8D),
+                        fontSize: 17,
+                        fontWeight: FontWeight.w400),
+                    suffixIcon: Icon(Icons.send),
+                    suffixIconColor: Color(0xFF0771F98),
                   ),
                 ),
               ),

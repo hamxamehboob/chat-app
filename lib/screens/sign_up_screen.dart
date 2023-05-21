@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chat_app/screens/home_screen.dart';
 import 'package:chat_app/screens/login_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../api/firebase_api.dart';
+import '../helper/dialogs.dart';
 import '../widgets/google_button.dart';
 
 class SignUp extends StatefulWidget {
@@ -52,9 +55,9 @@ class _SignUpState extends State<SignUp> {
                 ),
                 Row(
                   children: [
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           "Let's,Sign you up",
                           style: TextStyle(
@@ -140,7 +143,7 @@ class _SignUpState extends State<SignUp> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Already have an account?",
                       style: TextStyle(color: Colors.grey),
                     ),
@@ -152,11 +155,11 @@ class _SignUpState extends State<SignUp> {
                         Navigator.push(
                           (context),
                           MaterialPageRoute(
-                            builder: (_) => login(),
+                            builder: (_) => const login(),
                           ),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         "Login",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
@@ -170,7 +173,7 @@ class _SignUpState extends State<SignUp> {
                     label: 'SignUp',
                     route: () {
                       validate();
-                      SignUp();
+                      signUp();
                     }),
                 SizedBox(
                   height: screenHeight * 0.08,
@@ -207,7 +210,7 @@ class _SignUpState extends State<SignUp> {
                 ),
                 GoogleButton(
                   route: () {
-                    signInWithGoogle();
+                    _handleGoogleBtnClick();
                   },
                 ),
               ],
@@ -254,11 +257,11 @@ class _SignUpState extends State<SignUp> {
     }
   }
 
-  void SignUp() async {
+  void signUp() async {
     showDialog(
       context: context,
       builder: (context) {
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },
@@ -271,7 +274,7 @@ class _SignUpState extends State<SignUp> {
           .then(
             (value) => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => HomePage(),
+                builder: (_) => const HomePage(),
               ),
             ),
           )
@@ -282,30 +285,43 @@ class _SignUpState extends State<SignUp> {
     } on FirebaseAuthException catch (e) {}
   }
 
-  signInWithGoogle() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-    if ((await APIs.userExists())) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => HomePage()));
-    } else {
-      await APIs.createUser().then((value) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => HomePage()));
-      });
+  _handleGoogleBtnClick() {
+    Dialogs.showProgressBar(context);
+
+    _signInWithGoogle().then((user) async {
+      Navigator.pop(context);
+
+      if (user != null) {
+        if ((await APIs.userExists())) {
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (_) => const HomePage()));
+        } else {
+          await APIs.createUser().then((value) {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (_) => const HomePage()));
+          });
+        }
+      }
+    });
+  }
+
+  Future<UserCredential?> _signInWithGoogle() async {
+    try {
+      await InternetAddress.lookup('google.com');
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+      return await APIs.auth.signInWithCredential(credential);
+    } catch (e) {
+      Dialogs.showSnackBar(context, 'Something Went Wrong (Check Internet!)');
+      return null;
     }
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-    AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    print(userCredential.user?.displayName);
   }
 }

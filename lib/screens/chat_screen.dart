@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:chat_app/models/chat_user.dart';
 import 'package:chat_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -201,7 +199,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
           MaterialButton(
             onPressed: () {
               if (_textController.text.isNotEmpty) {
-                APIs.sendMessage(widget.user, _textController.text);
+                APIs.sendMessage(widget.user, _textController.text, Type.text);
                 _textController.text = '';
               }
               // else {

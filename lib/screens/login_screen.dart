@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:chat_app/helper/dialogs.dart';
 import 'package:chat_app/screens/home_screen.dart';
@@ -59,9 +58,9 @@ class _LoginState extends State<login> {
                 ),
                 Row(
                   children: [
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           "Hello, Welcome Back",
                           style: TextStyle(
@@ -146,7 +145,7 @@ class _LoginState extends State<login> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Don't have an account?",
                       style: TextStyle(color: Colors.grey),
                     ),
@@ -158,11 +157,11 @@ class _LoginState extends State<login> {
                         Navigator.push(
                           (context),
                           MaterialPageRoute(
-                            builder: (_) => SignUp(),
+                            builder: (_) => const SignUp(),
                           ),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         "Register",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),

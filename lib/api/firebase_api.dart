@@ -38,25 +38,31 @@ class APIs {
   }
 
   static String getConversationID(String id) => user.uid.hashCode <= id.hashCode
-      ? '${user.uid} _$id'
+      ? '${user.uid}_$id'
       : '${id}_${user.uid}';
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages(
       ChatUser user) {
-    return APIs.firestore
+    return firestore
         .collection('chats/${getConversationID(user.id)}/messages/')
+        .orderBy('sent', descending: true)
         .snapshots();
   }
 
-  static Future<void> sendMessage(ChatUser chatUser, String msg) async {
+  static Future<void> sendMessage(
+      ChatUser chatUser, String msg, Type type) async {
+    //message sending time (also used as id)
     final time = DateTime.now().millisecondsSinceEpoch.toString();
+
+    //message to send
     final Message message = Message(
         toId: chatUser.id,
         msg: msg,
         read: '',
-        type: Type.text,
+        type: type,
         fromId: user.uid,
         sent: time);
+
     final ref = firestore
         .collection('chats/${getConversationID(chatUser.id)}/messages/');
     await ref.doc(time).set(message.toJson());

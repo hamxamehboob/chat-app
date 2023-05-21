@@ -10,7 +10,6 @@ class ChatWidget extends StatefulWidget {
 }
 
 class _ChatWidgetState extends State<ChatWidget> {
-
   @override
   Widget build(BuildContext context) {
     var date = DateTime.now();
@@ -24,18 +23,21 @@ class _ChatWidgetState extends State<ChatWidget> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => ChattingScreen(user: widget.user,),
+              builder: (_) => ChattingScreen(
+                user: widget.user,
+              ),
             ),
           );
         },
         child: Container(
           height: screenHeight * 0.07,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                width: 2,
-                color: Color(0xFF771F98),
-              ),),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              width: 2,
+              color: const Color(0xFF771F98),
+            ),
+          ),
           child: Padding(
             padding: const EdgeInsets.only(left: 17, top: 9, right: 9),
             child: Column(
@@ -45,15 +47,15 @@ class _ChatWidgetState extends State<ChatWidget> {
                   children: [
                     Text(
                       widget.user.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Color(0xFF181818),
                           fontWeight: FontWeight.w600,
                           fontSize: 16),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Text(
                       time,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Color(0xFF5C5C5C),
                           fontSize: 11,
                           fontWeight: FontWeight.w400),

@@ -26,17 +26,18 @@ class _MessageCardState extends State<MessageCard> {
       children: [
         Flexible(
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: screenWidth * .04,vertical: screenHeight * .01),
+            margin: EdgeInsets.symmetric(
+                horizontal: screenWidth * .04, vertical: screenHeight * .01),
             padding: EdgeInsets.all(screenWidth * .04),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: Color(0xFF771F98),
+                color: const Color(0xFF771F98),
               ),
             ),
             child: Text(
               widget.message.msg,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Color(0xFF171717),
                   fontWeight: FontWeight.w400,
                   fontSize: 14),
@@ -55,18 +56,20 @@ class _MessageCardState extends State<MessageCard> {
       children: [
         Flexible(
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: screenWidth * .04,vertical: screenHeight * .01),
-            padding: EdgeInsets.only(top:10,left: 11,right: 39,bottom: 10 ),
+            margin: EdgeInsets.symmetric(
+                horizontal: screenWidth * .04, vertical: screenHeight * .01),
+            padding:
+                const EdgeInsets.only(top: 10, left: 11, right: 39, bottom: 10),
             decoration: BoxDecoration(
-              color: Color(0xFF771F98),
+              color: const Color(0xFF771F98),
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: Color(0xFF771F98),
+                color: const Color(0xFF771F98),
               ),
             ),
             child: Text(
               widget.message.msg,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w400,
                   fontSize: 14),

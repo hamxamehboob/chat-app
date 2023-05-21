@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:chat_app/models/chat_user.dart';
 import 'package:chat_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,6 @@ class _ChattingScreenState extends State<ChattingScreen> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -36,18 +37,18 @@ class _ChattingScreenState extends State<ChattingScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => HomePage(),
+                  builder: (_) => const HomePage(),
                 ),
               );
             },
-            child: Icon(
+            child: const Icon(
               Icons.arrow_back,
               color: Colors.black,
             ),
           ),
           centerTitle: true,
           title: ListTile(
-            leading: CircleAvatar(
+            leading: const CircleAvatar(
               backgroundColor: Colors.white,
               child: CircleAvatar(
                 backgroundColor: Color(0xffE6E6E6),
@@ -63,7 +64,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
               children: [
                 Text(
                   widget.user.name,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600,
                       fontSize: 16),
@@ -71,7 +72,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                 SizedBox(
                   height: screenHeight * 0.005,
                 ),
-                Text(
+                const Text(
                   "Online",
                   style: TextStyle(
                       color: Color(0xFF771F98),
@@ -95,6 +96,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                     case ConnectionState.active:
                     case ConnectionState.done:
                       final data = snapshot.data?.docs;
+                      // print('Data: ${jsonEncode(data![0].data())}');
                       _list = data
                               ?.map((e) => Message.fromJson(e.data()))
                               .toList() ??
@@ -172,7 +174,6 @@ class _ChattingScreenState extends State<ChattingScreen> {
           vertical: screenHeight * .01, horizontal: screenWidth * .025),
       child: Row(
         children: [
-          //input field & buttons
           Expanded(
             child: Card(
               shape: RoundedRectangleBorder(
@@ -182,23 +183,21 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   //emoji button
 
                   Expanded(
-                      child: TextField(
-                    controller: _textController,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    decoration: const InputDecoration(
-                        hintText: 'Type Something...',
-                        hintStyle: TextStyle(color: Colors.blueAccent),
-                        border: InputBorder.none),
-                  )),
-                  //adding some space
+                    child: TextField(
+                      controller: _textController,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                          hintText: 'Type Something...',
+                          hintStyle: TextStyle(color: Colors.blueAccent),
+                          border: InputBorder.none),
+                    ),
+                  ),
                   SizedBox(width: screenWidth * .02),
                 ],
               ),
             ),
           ),
-
-          //send message button
           MaterialButton(
             onPressed: () {
               if (_textController.text.isNotEmpty) {

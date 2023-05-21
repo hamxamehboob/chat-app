@@ -33,7 +33,7 @@ class APIs {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUser() {
     return APIs.firestore
         .collection('Users')
-        // .where('id', isNotEqualTo: user.uid)
+        .where('id', isNotEqualTo: user.uid)
         .snapshots();
   }
 

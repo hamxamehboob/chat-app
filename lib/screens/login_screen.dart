@@ -1,29 +1,35 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:chat_app/helper/dialogs.dart';
 import 'package:chat_app/screens/home_screen.dart';
 import 'package:chat_app/screens/sign_up_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:chat_app/widgets/text_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../api/firebase_api.dart';
 import '../widgets/google_button.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class login extends StatefulWidget {
+  const login({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<login> createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends State<login> {
   bool _isObscure = true;
   final GlobalKey<FormState> _pwKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
   final TextEditingController _emailtextcontroller = TextEditingController();
   final TextEditingController _pwtextcontroller = TextEditingController();
   String errorMessage = '';
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,10 +173,10 @@ class _LoginState extends State<Login> {
                   height: screenHeight * 0.011,
                 ),
                 ActionButton(
-                  label: 'Login',
+                  label: 'login',
                   route: () {
                     validate();
-                    Login();
+                    login();
                   },
                 ),
                 SizedBox(
@@ -187,7 +193,7 @@ class _LoginState extends State<Login> {
                         width: screenWeight * 0.03,
                       ),
                       const Text(
-                        "Or Login with",
+                        "Or login with",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w400),
                       ),
@@ -208,13 +214,9 @@ class _LoginState extends State<Login> {
                 ),
                 GoogleButton(
                   route: () {
-                    signInWithGoogle();
+                    _handleGoogleBtnClick();
                   },
                 ),
-
-                // Center(
-                //   child: Text(errorMessage),
-                // )
               ],
             ),
           ),
@@ -248,11 +250,11 @@ class _LoginState extends State<Login> {
     }
   }
 
-  void Login() async {
+  void login() async {
     showDialog(
       context: context,
       builder: (context) {
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },
@@ -305,39 +307,50 @@ class _LoginState extends State<Login> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
+        return const AlertDialog(
           title: Text("Wrong Password"),
         );
       },
     );
   }
 
-  signInWithGoogle() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
+  _handleGoogleBtnClick() {
+    Dialogs.showProgressBar(context);
 
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-    AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    if ((await APIs.userExists())) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => HomePage()));
-    } else {
-      await APIs.createUser().then((value) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => HomePage()));
-      });
-    }
-    print(userCredential.user?.displayName);
+    _signInWithGoogle().then((user) async {
+      Navigator.pop(context);
+
+      if (user != null) {
+        if ((await APIs.userExists())) {
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (_) => const HomePage()));
+        } else {
+          await APIs.createUser().then((value) {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (_) => const HomePage()));
+          });
+        }
+      }
+    });
   }
 
+  Future<UserCredential?> _signInWithGoogle() async {
+    try {
+      await InternetAddress.lookup('google.com');
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+      return await APIs.auth.signInWithCredential(credential);
+    } catch (e) {
+      Dialogs.showSnackBar(context, 'Something Went Wrong (Check Internet!)');
+      return null;
+    }
+  }
 }

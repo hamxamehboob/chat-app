@@ -26,14 +26,8 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    double screenWeight = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWeight = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -130,7 +124,7 @@ class _SignUpState extends State<SignUp> {
                             ),
                             onPressed: () {
                               setState(
-                                    () {
+                                () {
                                   _isObscure = !_isObscure;
                                 },
                               );
@@ -158,7 +152,7 @@ class _SignUpState extends State<SignUp> {
                         Navigator.push(
                           (context),
                           MaterialPageRoute(
-                            builder: (_) => Login(),
+                            builder: (_) => login(),
                           ),
                         );
                       },
@@ -212,7 +206,9 @@ class _SignUpState extends State<SignUp> {
                   height: screenHeight * 0.04,
                 ),
                 GoogleButton(
-                  route:(){ signInWithGoogle();},
+                  route: () {
+                    signInWithGoogle();
+                  },
                 ),
               ],
             ),
@@ -227,11 +223,12 @@ class _SignUpState extends State<SignUp> {
         _nameKey.currentState!.validate() ||
         _emailKey.currentState!.validate()) {}
   }
+
   String? emailValidate(value) {
     if (value.isEmpty) {
       return "Please enter a email";
     } else if (!RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+\.[a-zA-Z]+")
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+\.[a-zA-Z]+")
         .hasMatch(value)) {
       return "Enter Valid Email";
     } else {
@@ -269,19 +266,18 @@ class _SignUpState extends State<SignUp> {
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-          email: _emailTeextController.text,
-          password: _pwTextController.text)
+              email: _emailTeextController.text,
+              password: _pwTextController.text)
           .then(
-            (value) =>
-            Navigator.of(context).push(
+            (value) => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => HomePage(),
               ),
             ),
-      )
+          )
           .onError(
             (error, stackTrace) => print("Error ${error.toString()}"),
-      );
+          );
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {}
   }
@@ -309,7 +305,7 @@ class _SignUpState extends State<SignUp> {
     AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
     UserCredential userCredential =
-    await FirebaseAuth.instance.signInWithCredential(credential);
+        await FirebaseAuth.instance.signInWithCredential(credential);
     print(userCredential.user?.displayName);
   }
 }

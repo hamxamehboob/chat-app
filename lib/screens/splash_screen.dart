@@ -2,7 +2,6 @@ import 'package:chat_app/widgets/text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-
 import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -86,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 route: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => const Login(),
+                      builder: (_) => const login(),
                     ),
                   );
                 },

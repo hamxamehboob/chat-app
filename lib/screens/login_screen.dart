@@ -12,20 +12,21 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../api/firebase_api.dart';
 import '../widgets/google_button.dart';
 
-class login extends StatefulWidget {
-  const login({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
-  State<login> createState() => _LoginState();
+  State<Login> createState() => _LoginState();
 }
 
-class _LoginState extends State<login> {
+class _LoginState extends State<Login> {
   bool _isObscure = true;
   final GlobalKey<FormState> _pwKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
   final TextEditingController _emailtextcontroller = TextEditingController();
   final TextEditingController _pwtextcontroller = TextEditingController();
   String errorMessage = '';
+  @override
   void initState() {
     super.initState();
   }
@@ -263,26 +264,19 @@ class _LoginState extends State<login> {
           .signInWithEmailAndPassword(
               email: _emailtextcontroller.text,
               password: _pwtextcontroller.text)
-          .then(
-            (value) => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => HomePage(),
-              ),
-            ),
-          )
-          .onError(
-        (error, stackTrace) {
-          print("Error========= ${error.toString()}");
-          errorMessage = '';
-          errorMessage = error.toString();
-        },
-      );
+          .then((value) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const MainPage(),
+          ),
+        );
+      });
 
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       if (e.code == 'user-not-found') {
-        print("NO USER FOUND");
         wrongEmailDialog();
       } else if (e.code == 'wrong - password') {
         wrongPasswordDialog();
@@ -295,7 +289,7 @@ class _LoginState extends State<login> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
+        return const AlertDialog(
           title: Text("Wrong Email"),
         );
       },
@@ -323,11 +317,11 @@ class _LoginState extends State<login> {
         if ((await APIs.userExists())) {
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => const HomePage()));
+              context, MaterialPageRoute(builder: (_) => const MainPage()));
         } else {
           await APIs.createUser().then((value) {
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (_) => const HomePage()));
+                context, MaterialPageRoute(builder: (_) => const MainPage()));
           });
         }
       }
@@ -348,7 +342,8 @@ class _LoginState extends State<login> {
       );
       return await APIs.auth.signInWithCredential(credential);
     } catch (e) {
-      Dialogs.showSnackBar(context, 'Something Went Wrong (Check Internet!)');
+      Dialogs.showSnackBar(
+          context, 'Something Went Wrong Check Internet Connection');
       return null;
     }
   }

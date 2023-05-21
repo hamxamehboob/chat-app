@@ -15,7 +15,6 @@ class _ChatWidgetState extends State<ChatWidget> {
     var date = DateTime.now();
     String time = "${date.hour}.${date.minute}";
     double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.only(top: 32),
       child: GestureDetector(

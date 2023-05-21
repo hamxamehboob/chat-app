@@ -1,163 +1,68 @@
+import 'package:chat_app/screens/home_page.dart';
 import 'package:chat_app/screens/setting_screen.dart';
-import 'package:chat_app/screens/splash_screen.dart';
-import 'package:chat_app/widgets/chat_screen_widget.dart';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
-import '../api/firebase_api.dart';
-import '../models/chat_user.dart';
-
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class MainPage extends StatefulWidget {
+  const MainPage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  List<ChatUser> list = [];
-  final List<ChatUser> _searchList = [];
-  bool _isSearching = false;
-  int _selectedIndex = 0;
-  List<Widget> _screens = [
-    SplashScreen(),
-    SettingPage(),
-  ];
+class _MainPageState extends State<MainPage> {
+  int _page = 0;
+  GlobalKey _bottomNavigationKey = GlobalKey();
+  Widget getSelectedWidget() {
+    Widget widget;
+    switch (_page) {
+      case 0:
+        widget = const HomePage();
+        break;
+      case 1:
+        widget = const SettingPage();
+        break;
+      default:
+        widget = const SettingPage();
+        break;
+    }
+    return widget;
+  }
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-    return SafeArea(
-      child: Scaffold(
-        bottomNavigationBar: CurvedNavigationBar(
-          height: 60,
-          color: Color(0xff771F98),
-          backgroundColor: Colors.white,
-          items: <Widget>[
-            Icon(
-              Icons.person,
-              size: 30,
-              color: Colors.white,
-            ),
-            Icon(
-              Icons.chat,
-              color: Colors.white,
-              size: 30,
-            ),
-            Icon(
-              color: Colors.white,
-              Icons.settings,
-              size: 30,
-            ),
-          ],
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 22, top: 36, right: 21, bottom: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xFFF1F1F1),
-                      borderRadius: BorderRadius.circular(14)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 14),
-                    child: TextField(
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        icon: Icon(
-                          Icons.search,
-                          color: Colors.black,
-                        ),
-                        hintText: "Search",
-                        hintStyle: TextStyle(
-                          color: Color(0xFF252525),
-                        ),
-                      ),
-                      onChanged: (val) {
-                        _searchList.clear();
-                        for (var i in list) {
-                          if (i.name
-                                  .toLowerCase()
-                                  .contains(val.toLowerCase()) ||
-                              i.email.toLowerCase().contains(val.toLowerCase())){
-                            _searchList.add(i);
-                          }
-                          setState(() {
-                            _searchList;
-                          });
-
-                        }
-                      },
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: screenHeight * 0.03,
-                ),
-                Text(
-                  "Chats",
-                  style: TextStyle(
-                      color: Color(0xFF771F98),
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400),
-                ),
-                Expanded(
-                  child: StreamBuilder(
-                      stream: APIs.getAllUser(),
-                      builder: (context, snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                          case ConnectionState.none:
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          case ConnectionState.active:
-                          case ConnectionState.done:
-                            final data = snapshot.data?.docs;
-                            list = data
-                                    ?.map((e) => ChatUser.fromJson(e.data()))
-                                    .toList() ??
-                                [];
-                        }
-                        if (list.isNotEmpty) {
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            physics: BouncingScrollPhysics(),
-                            itemCount: _isSearching ? _searchList.length : list.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ChatWidget(
-                                user: _isSearching ? _searchList[index] :list[index],
-                              );
-                            },
-                          );
-                        } else {
-                          return Center(
-                            child: Text("No Messages Found"),
-                          );
-                        }
-                      }),
-                )
-              ],
-            ),
+    return Scaffold(
+      bottomNavigationBar: CurvedNavigationBar(
+        key: _bottomNavigationKey,
+        index: 0,
+        height: 60,
+        color: const Color(0xff771F98),
+        backgroundColor: Colors.white,
+        items: const <Widget>[
+          Icon(
+            Icons.person,
+            size: 30,
+            color: Colors.white,
           ),
-        ),
+          Icon(
+            Icons.chat,
+            color: Colors.white,
+            size: 30,
+          ),
+          Icon(
+            color: Colors.white,
+            Icons.settings,
+            size: 30,
+          ),
+        ],
+        onTap: (index) {
+          setState(() {
+            _page = index;
+          });
+        },
       ),
+      body: getSelectedWidget(),
     );
   }
-// void logout() async {
-//   await APIs.auth.signOut().then((value){
-//     await GoogleSignIN
-//   });
-//
-//
-//
-// }
 }

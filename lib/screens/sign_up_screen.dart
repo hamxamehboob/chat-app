@@ -155,7 +155,7 @@ class _SignUpState extends State<SignUp> {
                         Navigator.push(
                           (context),
                           MaterialPageRoute(
-                            builder: (_) => const login(),
+                            builder: (_) => const Login(),
                           ),
                         );
                       },
@@ -271,18 +271,17 @@ class _SignUpState extends State<SignUp> {
           .createUserWithEmailAndPassword(
               email: _emailTeextController.text,
               password: _pwTextController.text)
-          .then(
-            (value) => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => const HomePage(),
-              ),
-            ),
-          )
-          .onError(
-            (error, stackTrace) => print("Error ${error.toString()}"),
-          );
+          .then((value) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const MainPage(),
+          ),
+        );
+      });
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {}
+      // ignore: empty_catches
+    } on FirebaseAuthException {}
   }
 
   _handleGoogleBtnClick() {
@@ -295,11 +294,11 @@ class _SignUpState extends State<SignUp> {
         if ((await APIs.userExists())) {
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => const HomePage()));
+              context, MaterialPageRoute(builder: (_) => const MainPage()));
         } else {
           await APIs.createUser().then((value) {
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (_) => const HomePage()));
+                context, MaterialPageRoute(builder: (_) => const MainPage()));
           });
         }
       }

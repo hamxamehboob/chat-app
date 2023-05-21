@@ -12,6 +12,6 @@ class Dialogs {
   static void showProgressBar(BuildContext context) {
     showDialog(
         context: context,
-        builder: (_) => Center(child: CircularProgressIndicator()));
+        builder: (_) => const Center(child: CircularProgressIndicator()));
   }
 }

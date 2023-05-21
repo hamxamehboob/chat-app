@@ -35,7 +35,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const HomePage(),
+                  builder: (_) => const MainPage(),
                 ),
               );
             },
@@ -94,7 +94,6 @@ class _ChattingScreenState extends State<ChattingScreen> {
                     case ConnectionState.active:
                     case ConnectionState.done:
                       final data = snapshot.data?.docs;
-                      // print('Data: ${jsonEncode(data![0].data())}');
                       _list = data
                               ?.map((e) => Message.fromJson(e.data()))
                               .toList() ??
@@ -124,46 +123,6 @@ class _ChattingScreenState extends State<ChattingScreen> {
         ));
   }
 
-  // Widget _MessageTextField() {
-  //   double screenHeight = MediaQuery.of(context).size.height;
-  //   return Row(
-  //     children: [
-  //       Padding(
-  //         padding: const EdgeInsets.only(right: 60),
-  //         child: Container(
-  //           height: screenHeight * 0.1,
-  //           decoration: BoxDecoration(
-  //               boxShadow: [BoxShadow(blurRadius: 2)],
-  //               color: Color(0xFFF8F8F8),
-  //               borderRadius: BorderRadius.only(
-  //                 topLeft: Radius.circular(20),
-  //                 topRight: Radius.circular(20),
-  //               ),),
-  //           child: Padding(
-  //             padding: const EdgeInsets.only(
-  //               left: 20,
-  //             ),
-  //             child: TextFormField(
-  //               controller: _textController,
-  //               textAlignVertical: TextAlignVertical.center,
-  //               maxLines: 1000,
-  //               keyboardType: TextInputType.multiline,
-  //               decoration: InputDecoration(
-  //                 border: InputBorder.none,
-  //                 hintText: "Type Here...",
-  //                 hintStyle: TextStyle(
-  //                     color: Color(0xFF8D8D8D),
-  //                     fontSize: 17,
-  //                     fontWeight: FontWeight.w400),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //       IconButton(onPressed: (){}, icon: Icon(Icons.send),)
-  //     ],
-  //   );
-  // }
   Widget _chatInput() {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -175,24 +134,29 @@ class _ChattingScreenState extends State<ChattingScreen> {
           Expanded(
             child: Card(
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              child: Row(
-                children: [
-                  //emoji button
-
-                  Expanded(
-                    child: TextField(
-                      controller: _textController,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                          hintText: 'Type Something...',
-                          hintStyle: TextStyle(color: Colors.blueAccent),
-                          border: InputBorder.none),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(left: screenWidth * 0.05),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _textController,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        decoration: const InputDecoration(
+                            hintText: 'Type Something...',
+                            hintStyle: TextStyle(
+                                color: Color(0xFF8D8D8D),
+                                fontSize: 17,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none),
+                      ),
                     ),
-                  ),
-                  SizedBox(width: screenWidth * .02),
-                ],
+                    SizedBox(width: screenWidth * .02),
+                  ],
+                ),
               ),
             ),
           ),
@@ -202,11 +166,6 @@ class _ChattingScreenState extends State<ChattingScreen> {
                 APIs.sendMessage(widget.user, _textController.text, Type.text);
                 _textController.text = '';
               }
-              // else {
-              //     //simply send message
-              //     APIs.sendMessage(
-              //         widget.user, _textController.text,);
-              //   }
             },
             minWidth: 0,
             padding:

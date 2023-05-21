@@ -17,7 +17,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -85,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 route: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => const login(),
+                      builder: (_) => const Login(),
                     ),
                   );
                 },

@@ -5,7 +5,7 @@
  https://www.figma.com/file/MKTZQr6L5vrkawh4TH2OOL/chatting-app-(Community)?node-id=3%3A380&t=IR5WcufTJDd4sfl4-1
  
 # Technology Used:
-<div align = "center">
+<div>
  <img src="https://github.com/devicons/devicon/blob/master/icons/flutter/flutter-original.svg" title="Flutter" alt="Flutter" width="40" height="60"/>&nbsp;
   <img src="https://github.com/devicons/devicon/blob/master/icons/firebase/firebase-plain-wordmark.svg" title="firebase" alt="firebase" width="40" height="60"/>&nbsp;
 </div>

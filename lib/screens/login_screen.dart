@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:chat_app/helper/dialogs.dart';
-import 'package:chat_app/screens/home_screen.dart';
+import 'package:chat_app/screens/main_page.dart';
 import 'package:chat_app/screens/sign_up_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:chat_app/widgets/text_button.dart';

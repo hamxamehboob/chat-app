@@ -13,8 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<ChatUser> list = [];
-  final List<ChatUser> _searchList = [];
-  final bool _isSearching = false;
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -25,40 +24,6 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: const Color(0xFFF1F1F1),
-                  borderRadius: BorderRadius.circular(14)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 14),
-                child: TextField(
-                  autofocus: true,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    icon: Icon(
-                      Icons.search,
-                      color: Colors.black,
-                    ),
-                    hintText: "Search",
-                    hintStyle: TextStyle(
-                      color: Color(0xFF252525),
-                    ),
-                  ),
-                  onChanged: (val) {
-                    _searchList.clear();
-                    for (var i in list) {
-                      if (i.name.toLowerCase().contains(val.toLowerCase()) ||
-                          i.email.toLowerCase().contains(val.toLowerCase())) {
-                        _searchList.add(i);
-                      }
-                      setState(() {
-                        _searchList;
-                      });
-                    }
-                  },
-                ),
-              ),
-            ),
             SizedBox(
               height: screenHeight * 0.03,
             ),
@@ -92,12 +57,10 @@ class _HomePageState extends State<HomePage> {
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
                         physics: const BouncingScrollPhysics(),
-                        itemCount:
-                            _isSearching ? _searchList.length : list.length,
+                        itemCount: list.length,
                         itemBuilder: (BuildContext context, int index) {
                           return ChatWidget(
-                            user:
-                                _isSearching ? _searchList[index] : list[index],
+                            user: list[index],
                           );
                         },
                       );

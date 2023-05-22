@@ -17,13 +17,14 @@ class APIs {
   static Future<void> createUser() async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
     final chatUser = ChatUser(
-        about: 'Hey,I am Using Chat Application',
-        name: user.displayName.toString(),
-        isOnline: false,
-        id: auth.currentUser!.uid,
-        lastActive: time,
-        email: user.email.toString(),
-        pushToken: '');
+      about: 'Hey,I am Using Chat Application',
+      name: user.displayName.toString(),
+      isOnline: false,
+      id: auth.currentUser!.uid,
+      lastActive: time,
+      email: user.email.toString(),
+      pushToken: '',
+    );
     return await firestore
         .collection('Users')
         .doc(user.uid)
@@ -45,16 +46,12 @@ class APIs {
       ChatUser user) {
     return firestore
         .collection('chats/${getConversationID(user.id)}/messages/')
-        .orderBy('sent', descending: true)
         .snapshots();
   }
 
   static Future<void> sendMessage(
       ChatUser chatUser, String msg, Type type) async {
-    //message sending time (also used as id)
     final time = DateTime.now().millisecondsSinceEpoch.toString();
-
-    //message to send
     final Message message = Message(
         toId: chatUser.id,
         msg: msg,
@@ -62,7 +59,6 @@ class APIs {
         type: type,
         fromId: user.uid,
         sent: time);
-
     final ref = firestore
         .collection('chats/${getConversationID(chatUser.id)}/messages/');
     await ref.doc(time).set(message.toJson());

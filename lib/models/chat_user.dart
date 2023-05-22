@@ -8,8 +8,10 @@ class ChatUser {
     required this.email,
     required this.pushToken,
   });
+
   late String about;
   late String name;
+  late String createdAt;
   late bool isOnline;
   late String id;
   late String lastActive;
@@ -28,6 +30,7 @@ class ChatUser {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
+
     data['about'] = about;
     data['name'] = name;
     data['is_online'] = isOnline;

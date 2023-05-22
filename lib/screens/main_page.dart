@@ -1,8 +1,9 @@
 import 'package:chat_app/screens/home_page.dart';
-import 'package:chat_app/screens/setting_screen.dart';
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+
+import '../api/firebase_api.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -13,18 +14,21 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _page = 0;
-  GlobalKey _bottomNavigationKey = GlobalKey();
+  final GlobalKey _bottomNavigationKey = GlobalKey();
+
   Widget getSelectedWidget() {
     Widget widget;
     switch (_page) {
       case 0:
         widget = const HomePage();
         break;
-      case 1:
-        widget = const SettingPage();
-        break;
+      // case 1:
+      //   widget = SettingPage(
+      //     user: APIs.me,
+      //   );
+      //   break;
       default:
-        widget = const SettingPage();
+        widget = const HomePage();
         break;
     }
     return widget;
@@ -45,16 +49,16 @@ class _MainPageState extends State<MainPage> {
             size: 30,
             color: Colors.white,
           ),
-          Icon(
-            Icons.chat,
-            color: Colors.white,
-            size: 30,
-          ),
-          Icon(
-            color: Colors.white,
-            Icons.settings,
-            size: 30,
-          ),
+          // Icon(
+          //   Icons.chat,
+          //   color: Colors.white,
+          //   size: 30,
+          // ),
+          // Icon(
+          //   color: Colors.white,
+          //   Icons.settings,
+          //   size: 30,
+          // ),
         ],
         onTap: (index) {
           setState(() {

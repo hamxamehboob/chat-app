@@ -171,7 +171,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
             padding:
                 const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10),
             shape: const CircleBorder(),
-            color: Colors.green,
+            color: Color(0xFF771F98),
             child: const Icon(Icons.send, color: Colors.white, size: 28),
           )
         ],

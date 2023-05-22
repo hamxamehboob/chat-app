@@ -1,5 +1,5 @@
-# Chat App
- I have Created an Chat App Using Flutter Framework and Firebase for real time messaging.
+# WeChat
+ WeChat is an chatting application where user can chat with each other with a real time messaging functionality.
  
  Figma Design Link:
  https://www.figma.com/file/MKTZQr6L5vrkawh4TH2OOL/chatting-app-(Community)?node-id=3%3A380&t=IR5WcufTJDd4sfl4-1

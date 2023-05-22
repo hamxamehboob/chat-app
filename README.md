@@ -19,4 +19,4 @@
 * Once user done chatting, user can return to the Home screen by tapping the "Back" button on the top left corner of the screen.
 
 # System Architecture:
-<img src="https://user-images.githubusercontent.com/97390895/235974163-318e024b-b072-4bc9-b767-056e7b93fea1.png"  ></img>
+<img src="https://github.com/hamxamehboob/ChatApp/assets/97390895/ebea37d9-a9a2-4adb-bfe3-1161ec8bb1c3"  ></img>
